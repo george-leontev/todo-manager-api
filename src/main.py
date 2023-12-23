@@ -3,8 +3,22 @@ from fastapi import FastAPI
 import pathlib
 from src.models.user_model import UserModel
 from pydantic import TypeAdapter
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",
+    "https://todo-manager-ui.onrender.com"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get('/')
 async def get():
@@ -33,7 +47,7 @@ async def post(user: UserModel):
     users.append(user)
 
     with open(f'{root}/data/data.json', 'w', encoding='utf-8') as f:
-        json_data = TypeAdapter(List[UserModel]).dump_json(users).decode("utf-8") 
+        json_data = TypeAdapter(List[UserModel]).dump_json(users).decode("utf-8")
         f.write(json_data)
 
     return users
