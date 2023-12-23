@@ -10,21 +10,30 @@ app = FastAPI()
 async def get():
     return {'message': 'Hello world'}
 
-@app.get('/data')
-def get_data():
+@app.get('/users')
+async def get_user_list():
     root = pathlib.Path(__file__).parent.parent
 
     with open(f'{root}/data/data.json', 'r', encoding='utf-8') as f:
         json_data = f.read()
 
-    items: List[UserModel] = TypeAdapter(List[UserModel]).validate_json(json_data)
+    users: List[UserModel] = TypeAdapter(List[UserModel]).validate_json(json_data)
 
-    return items
-# Response(content=json_data, media_type="application/json")
+    return users
 
-@app.post('/data')
-def post():
+@app.post('/users')
+async def post(user: UserModel):
     root = pathlib.Path(__file__).parent.parent
 
+    with open(f'{root}/data/data.json', 'r', encoding='utf-8') as f:
+        json_data = f.read()
+
+    users: List[UserModel] = TypeAdapter(List[UserModel]).validate_json(json_data)
+
+    users.append(user)
+
     with open(f'{root}/data/data.json', 'w', encoding='utf-8') as f:
-        pass
+        json_data = TypeAdapter(List[UserModel]).dump_json(users).decode("utf-8") 
+        f.write(json_data)
+
+    return users
