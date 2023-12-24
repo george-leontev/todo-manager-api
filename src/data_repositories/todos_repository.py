@@ -1,0 +1,34 @@
+import pathlib
+from typing import List
+
+from pydantic import TypeAdapter
+
+from src.models.todo_model import TodoModel
+
+
+class TodosRepository:
+
+    def _get_root(self) -> str:
+        return pathlib.Path(__file__).parent.parent.parent
+
+    def get_list(self) -> List[TodoModel]:
+        root = self._get_root()
+        with open(f"{root}/data/data.json", "r", encoding="utf-8") as f:
+            todos_json = f.read()
+
+        todos: List[TodoModel] = TypeAdapter(List[TodoModel]).validate_json(todos_json)
+
+        return todos
+
+    def post(self, todo: TodoModel) -> TodoModel:
+        todos = self.get_list()
+        next_id = max([todo.id for todo in todos]) + 1
+        todo.id = next_id
+        todos.append(todo)
+
+        root = self._get_root()
+        with open(f"{root}/data/data.json", "w", encoding="utf-8") as f:
+            todos_json = TypeAdapter(List[TodoModel]).dump_json(todos).decode("utf-8")
+            f.write(todos_json)
+
+        return todo

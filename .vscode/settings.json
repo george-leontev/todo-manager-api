@@ -7,5 +7,10 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
         "**/__pycache__": true
-    }
+    },
+    "pylint.args": [
+        "--disable=missing-function-docstring",
+        "--disable=missing-module-docstring",
+        "--disable=missing-class-docstring",
+    ]
 }

@@ -1,16 +1,15 @@
 from typing import List
+
 from fastapi import FastAPI
-import pathlib
-from src.models.user_model import UserModel
-from pydantic import TypeAdapter
+from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
+from src.data_repositories.todos_repository import TodosRepository
+
+from src.models.todo_model import TodoModel
 
 app = FastAPI()
 
-origins = [
-    "http://localhost:3000",
-    "https://todo-manager-ui.onrender.com"
-]
+origins = ["http://localhost:3000", "https://todo-manager-ui.onrender.com"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -20,34 +19,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get('/')
+
+@app.get("/")
 async def get():
-    return {'message': 'Hello world'}
+    return RedirectResponse('/docs')
 
-@app.get('/users')
-async def get_user_list():
-    root = pathlib.Path(__file__).parent.parent
 
-    with open(f'{root}/data/data.json', 'r', encoding='utf-8') as f:
-        json_data = f.read()
+@app.get("/todos")
+async def get_user_list() -> List[TodoModel]:
+    todo_repository = TodosRepository()
+    todos = todo_repository.get_list()
 
-    users: List[UserModel] = TypeAdapter(List[UserModel]).validate_json(json_data)
+    return todos
 
-    return users
 
-@app.post('/users')
-async def post(user: UserModel):
-    root = pathlib.Path(__file__).parent.parent
+@app.post("/todos")
+async def post(todo: TodoModel) -> TodoModel:
+    todo_repository = TodosRepository()
+    todo = todo_repository.post(todo)
 
-    with open(f'{root}/data/data.json', 'r', encoding='utf-8') as f:
-        json_data = f.read()
-
-    users: List[UserModel] = TypeAdapter(List[UserModel]).validate_json(json_data)
-
-    users.append(user)
-
-    with open(f'{root}/data/data.json', 'w', encoding='utf-8') as f:
-        json_data = TypeAdapter(List[UserModel]).dump_json(users).decode("utf-8")
-        f.write(json_data)
-
-    return users
+    return todo
