@@ -39,3 +39,10 @@ async def post(todo: TodoModel) -> TodoModel:
     todo = todo_repository.post(todo)
 
     return todo
+
+@app.delete('/todos/{todo_id}')
+async def delete(todo_id: int):
+    todo_repository = TodosRepository()
+    deleted_todo = todo_repository.delete(todo_id)
+
+    return deleted_todo

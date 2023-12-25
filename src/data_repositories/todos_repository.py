@@ -7,9 +7,14 @@ from src.models.todo_model import TodoModel
 
 
 class TodosRepository:
-
     def _get_root(self) -> str:
         return pathlib.Path(__file__).parent.parent.parent
+
+    def _write_todos(self, todos: List[TodoModel]):
+        root = self._get_root()
+        with open(f"{root}/data/data.json", "w", encoding="utf-8") as f:
+            todos_json = TypeAdapter(List[TodoModel]).dump_json(todos).decode("utf-8")
+            f.write(todos_json)
 
     def get_list(self) -> List[TodoModel]:
         root = self._get_root()
@@ -26,9 +31,16 @@ class TodosRepository:
         todo.id = next_id
         todos.append(todo)
 
-        root = self._get_root()
-        with open(f"{root}/data/data.json", "w", encoding="utf-8") as f:
-            todos_json = TypeAdapter(List[TodoModel]).dump_json(todos).decode("utf-8")
-            f.write(todos_json)
+        self._write_todos(todos)
 
         return todo
+
+    def delete(self, todo_id: int) -> TodoModel | None:
+        todos = self.get_list()
+        deleted_todo = next((todo for todo in todos if todo.id == todo_id), None)
+
+        if deleted_todo is not None:
+            todos.remove(deleted_todo)
+            self._write_todos(todos)
+
+        return deleted_todo
