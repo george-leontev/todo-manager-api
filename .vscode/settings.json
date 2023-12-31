@@ -8,6 +8,9 @@
         "**/Thumbs.db": true,
         "**/__pycache__": true
     },
+    "pylint.path": [
+        "${workspaceFolder}/.venv/bin/pylint"
+    ],
     "pylint.args": [
         "--disable=missing-function-docstring",
         "--disable=missing-module-docstring",
