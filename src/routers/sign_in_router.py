@@ -10,7 +10,7 @@ from src.utils.auth_utils import verify_password, create_access_token
 
 router = APIRouter(prefix='/sign-in', tags=['sign-in'])
 
-@router.post("/sign-in")
+@router.post("/")
 async def sign_in(login: LoginModel):
     user_repository = UsersRepository()
     user = user_repository.get_by_email(login.email)
