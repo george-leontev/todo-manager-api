@@ -27,7 +27,7 @@ class TodosRepository:
 
     def post(self, todo: TodoModel) -> TodoModel:
         todos = self.get_list()
-        next_id = max([todo.id for todo in todos]) + 1
+        next_id = max([t.id for t in todos]) + 1
         todo.id = next_id
         todos.append(todo)
 
@@ -36,6 +36,7 @@ class TodosRepository:
         return todo
 
     def delete(self, todo_id: int) -> TodoModel | None:
+
         todos = self.get_list()
         deleted_todo = next((todo for todo in todos if todo.id == todo_id), None)
 
@@ -44,3 +45,17 @@ class TodosRepository:
             self._write_todos(todos)
 
         return deleted_todo
+
+    def put(self, todo: TodoModel) -> TodoModel | None:
+        todos = self.get_list()
+        original_todo = next((t for t in todos if t.id == todo.id), None)
+
+        if original_todo is not None:
+            todos.remove(original_todo)
+            todos.append(todo)
+            todos.sort(key=lambda t: t.id)
+            self._write_todos(todos)
+
+            return todo
+
+        return None

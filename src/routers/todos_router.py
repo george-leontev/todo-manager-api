@@ -18,9 +18,9 @@ async def get_user_list() -> List[TodoModel]:
 @router.post('/')
 async def post(todo: TodoModel) -> TodoModel:
     todo_repository = TodosRepository()
-    todo = todo_repository.post(todo)
+    added_todo = todo_repository.post(todo)
 
-    return todo
+    return added_todo
 
 
 @router.delete('/{todo_id}')
@@ -29,3 +29,10 @@ async def delete(todo_id: int):
     deleted_todo = todo_repository.delete(todo_id)
 
     return deleted_todo
+
+@router.put('/')
+async def put(todo: TodoModel) -> TodoModel:
+    todo_repository = TodosRepository()
+    edited_todo = todo_repository.put(todo)
+
+    return edited_todo
