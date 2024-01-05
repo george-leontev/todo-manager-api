@@ -10,6 +10,7 @@ class TodoStatus(IntEnum):
 
 class TodoModel(BaseModel):
     id: int
-    description: str
+    title: str
+    description: str | None
     date: datetime
     status: TodoStatus
