@@ -1,7 +1,7 @@
-from pydantic import BaseModel
+from src.models.app_base_model import AppBaseModel
 
 
-class AccessTokenModel(BaseModel):
-    id: int
+class AuthUserModel(AppBaseModel):
+    user_id: int
     email: str
     token: str

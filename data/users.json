@@ -3,5 +3,10 @@
         "id": 1,
         "email": "egorleontev54@gmail.com",
         "hashed_password": "$2b$12$m.YgUYRlgimUBac6oJz55ebTHBt3L0U0pNgtphS42oCsejgAAPleS"
+    },
+    {
+        "id": 2,
+        "email": "leonetx@yandex.ru",
+        "hashed_password": "$2b$12$MCMLP0hY6DO9xwlli/Wyu.CusXpUWXapudLBu1NYTictJneUfTV5m"
     }
 ]

@@ -12,13 +12,13 @@ class TodosRepository:
 
     def _write_todos(self, todos: List[TodoModel]):
         root = self._get_root()
-        with open(f"{root}/data/data.json", "w", encoding="utf-8") as f:
-            todos_json = TypeAdapter(List[TodoModel]).dump_json(todos).decode("utf-8")
+        with open(f'{root}/data/todos.json', 'w', encoding='utf-8') as f:
+            todos_json = TypeAdapter(List[TodoModel]).dump_json(todos).decode('utf-8')
             f.write(todos_json)
 
     def get_list(self) -> List[TodoModel]:
         root = self._get_root()
-        with open(f"{root}/data/data.json", "r", encoding="utf-8") as f:
+        with open(f'{root}/data/todos.json', 'r', encoding='utf-8') as f:
             todos_json = f.read()
 
         todos: List[TodoModel] = TypeAdapter(List[TodoModel]).validate_json(todos_json)
