@@ -19,7 +19,7 @@ async def sign_in(login: LoginModel):
     if user is not None:
         if verify_password(login.password, user.hashed_password):
             access_token = create_access_token(
-                data={"sub": user.id}, expires_delta=timedelta(minutes=60)
+                data={"sub": user.email}, expires_delta=timedelta(minutes=60)
             )
 
             return AuthUserModel(

@@ -14,3 +14,4 @@ class TodoModel(AppBaseModel):
     description: str | None
     date: datetime
     status: TodoStatus
+    user_id: int

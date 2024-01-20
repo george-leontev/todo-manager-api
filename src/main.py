@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from src.routers.todos_router import router as todos_router
 from src.routers.default_router import router as default_router

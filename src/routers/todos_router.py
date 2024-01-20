@@ -1,38 +1,41 @@
-from typing import List
-from fastapi import APIRouter
+from typing import Annotated, List
+from fastapi import APIRouter, Depends
 
+from src.models.user_model import UserModel
 from src.models.todo_model import TodoModel
 from src.data_repositories.todos_repository import TodosRepository
+from src.utils.auth_utils import get_auth_user
 
-router = APIRouter(prefix='/todos', tags=['todos'])
+router = APIRouter(prefix="/todos", tags=["todos"])
 
 
-@router.get('/')
-async def get_user_list() -> List[TodoModel]:
+@router.get("/")
+async def get_user_list(auth_user: Annotated[UserModel, Depends(get_auth_user)]) -> List[TodoModel]:
     todo_repository = TodosRepository()
-    todos = todo_repository.get_list()
+    todos = todo_repository.get_list(auth_user)
 
     return todos
 
 
-@router.post('/')
-async def post(todo: TodoModel) -> TodoModel:
+@router.post("/")
+async def post(todo: TodoModel, auth_user: Annotated[UserModel, Depends(get_auth_user)]) -> TodoModel:
     todo_repository = TodosRepository()
-    added_todo = todo_repository.post(todo)
+    added_todo = todo_repository.post(todo, auth_user)
 
     return added_todo
 
 
-@router.delete('/{todo_id}')
-async def delete(todo_id: int):
+@router.delete("/{todo_id}")
+async def delete(todo_id: int, auth_user: Annotated[UserModel, Depends(get_auth_user)]):
     todo_repository = TodosRepository()
-    deleted_todo = todo_repository.delete(todo_id)
+    deleted_todo = todo_repository.delete(todo_id, auth_user)
 
     return deleted_todo
 
-@router.put('/')
-async def put(todo: TodoModel) -> TodoModel:
+
+@router.put("/")
+async def put(todo: TodoModel, auth_user: Annotated[UserModel, Depends(get_auth_user)]) -> TodoModel:
     todo_repository = TodosRepository()
-    edited_todo = todo_repository.put(todo)
+    edited_todo = todo_repository.put(todo, auth_user)
 
     return edited_todo
