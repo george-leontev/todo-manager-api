@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 
+from src.routers.registration_router import router as registration_router
 from src.routers.todos_router import router as todos_router
 from src.routers.default_router import router as default_router
 from src.routers.sign_in_router import router as sign_in_router
@@ -22,3 +23,4 @@ app.add_middleware(
 app.include_router(router=default_router)
 app.include_router(router=sign_in_router)
 app.include_router(router=todos_router)
+app.include_router(router=registration_router)
