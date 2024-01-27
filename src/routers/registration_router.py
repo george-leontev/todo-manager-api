@@ -1,5 +1,6 @@
 from re import fullmatch
-from fastapi import APIRouter, Response
+from fastapi import APIRouter
+import yagmail
 
 from src.models.registration_model import RegistrationModel
 
@@ -15,5 +16,17 @@ async def post_registration(registration: RegistrationModel):
 
     if not fullmatch(email_pattern, registration.email):
         raise Exception("Email is wrong.")
+
+
+
+    receiver = registration.email
+    body = "Hello there from Yagmail"
+
+    yag = yagmail.SMTP("egorleontev54@gmail.com", password='nc3pe41980')
+    a = yag.send(
+        to=receiver,
+        subject="Yagmail test",
+        contents=body,
+    )
 
     return registration
