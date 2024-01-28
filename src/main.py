@@ -7,6 +7,7 @@ from src.routers.todos_router import router as todos_router
 from src.routers.default_router import router as default_router
 from src.routers.sign_in_router import router as sign_in_router
 
+MASTER_KEY = 'gXTYTSScTaXR63ussZVLtT4aAKPgwp+5epbzRlTAfJU='
 
 app = FastAPI()
 

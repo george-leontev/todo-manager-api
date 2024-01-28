@@ -11,7 +11,7 @@ class TodosRepository:
     def _get_root(self) -> str:
         return pathlib.Path(__file__).parent.parent.parent
 
-    def _write_todos(self, todos: List[TodoModel]):
+    def _write(self, todos: List[TodoModel]):
         root = self._get_root()
         with open(f"{root}/data/todos.json", "w", encoding="utf-8") as f:
             todos_json = (
@@ -39,7 +39,7 @@ class TodosRepository:
         todo.user_id = user.id
         todos.append(todo)
 
-        self._write_todos(todos)
+        self._write(todos)
 
         return todo
 
@@ -49,7 +49,7 @@ class TodosRepository:
 
         if deleted_todo is not None:
             todos.remove(deleted_todo)
-            self._write_todos(todos)
+            self._write(todos)
 
         return deleted_todo
 
@@ -62,7 +62,7 @@ class TodosRepository:
             todos.remove(original_todo)
             todos.append(todo)
             todos.sort(key=lambda t: t.id)
-            self._write_todos(todos)
+            self._write(todos)
 
             return todo
 

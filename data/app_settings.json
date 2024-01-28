@@ -1,0 +1,10 @@
+{
+    "masterKey": "gXTYTSScTaXR63ussZVLtT4aAKPgwp+5epbzRlTAfJU=",
+    "emailConfig": {
+        "smtpServer": "webmail.1gb.ru",
+        "port": 25,
+        "senderEmail": "support@ic-eta.ru",
+        "password": "gh8nc3pe4",
+        "login": "u468124"
+    }
+}
