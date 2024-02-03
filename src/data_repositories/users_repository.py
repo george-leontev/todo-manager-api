@@ -1,5 +1,6 @@
 import pathlib
 from typing import List
+from uuid import uuid4
 
 from pydantic import TypeAdapter
 from src.models.user_model import UserModel
@@ -42,10 +43,10 @@ class UsersRepository:
 
     def post(self, user: UserModel) -> UserModel:
         users = self.get_list()
-        next_id = max([u.id for u in users]) + 1
+        next_id = uuid4().__str__()
         user.id = next_id
         users.append(user)
 
-        self._write_todos(users)
+        self._write(users)
 
         return user

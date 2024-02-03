@@ -1,12 +1,12 @@
 [
     {
-        "id": 1,
-        "email": "egorleontev54@gmail.com",
-        "hashed_password": "$2b$12$m.YgUYRlgimUBac6oJz55ebTHBt3L0U0pNgtphS42oCsejgAAPleS"
+        "id": "0a204324-8915-4b45-bca3-53bfab2fbe2f",
+        "email": "leonetx@yandex.ru",
+        "hashedPassword": "$2b$12$712VH8SG2FY6wHq2f2AbbOoGssWCFDB7HKpeZwROU5hOqFhLspD8."
     },
     {
-        "id": 2,
-        "email": "leonetx@yandex.ru",
-        "hashed_password": "$2b$12$MCMLP0hY6DO9xwlli/Wyu.CusXpUWXapudLBu1NYTictJneUfTV5m"
+        "id": "3519010a-662e-4b16-a68f-b6af493d971d",
+        "email": "egorleontev54@gmail.com",
+        "hashedPassword": "$2b$12$hzSMWZnm8jcHWOmlD2k8BOTvOg.eMFEClwoALZvNQ4h1jvShkpUdS"
     }
 ]

@@ -9,9 +9,9 @@ class TodoStatus(IntEnum):
 
 
 class TodoModel(AppBaseModel):
-    id: int
+    id: str
     title: str
     description: str | None
     date: datetime
     status: TodoStatus
-    user_id: int
+    user_id: str

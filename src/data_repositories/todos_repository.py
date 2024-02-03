@@ -1,5 +1,6 @@
 import pathlib
 from typing import List
+from uuid import uuid4
 
 from pydantic import TypeAdapter
 from src.models.user_model import UserModel
@@ -34,7 +35,8 @@ class TodosRepository:
 
     def post(self, todo: TodoModel, user: UserModel) -> TodoModel:
         todos = self.get_list(user)
-        next_id = max([t.id for t in todos]) + 1
+
+        next_id = uuid4().__str__()
         todo.id = next_id
         todo.user_id = user.id
         todos.append(todo)

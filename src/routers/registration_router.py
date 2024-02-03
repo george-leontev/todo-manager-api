@@ -1,4 +1,5 @@
 from base64 import b64decode
+from http import HTTPStatus
 from passlib.context import CryptContext
 from re import fullmatch
 from typing import Annotated
@@ -15,7 +16,7 @@ from src.data_repositories.app_settings_repository import AppSettingsRepository
 from src.models.registration_model import RegistrationModel
 from src.utils.encoding import decrypt, encrypt
 
-registrarion_cache: dict[str, str] = {}
+registration_cache: dict[str, str] = {}
 router = APIRouter(prefix="/registration", tags=["registration"])
 
 @router.post("/")
@@ -46,8 +47,8 @@ async def post_registration(
     message["From"] = sender_email
     message["To"] = receiver_email
     message["Subject"] = "Registration account in Todo Manager"
-    secret = encrypt(f'{receiver_email}->{password}', b64decode(MASTER_KEY))
-    registrarion_cache[receiver_email] = password
+    secret = encrypt(f'{receiver_email}->{registration.password}', b64decode(MASTER_KEY))
+    registration_cache[receiver_email] = registration.password
 
     message.attach(MIMEText(f'http://localhost:3000/registration/confirm?ticket={secret}', "plain"))
 
@@ -58,7 +59,7 @@ async def post_registration(
     return registration
 
 
-@router.get("/confirm")
+@router.post("/confirm")
 def confirm_registration(ticket: str, app_settings_repository: Annotated[AppSettingsRepository, Depends(AppSettingsRepository)]):
     app_settings = app_settings_repository.get_settings()
     MASTER_KEY = app_settings.master_key
@@ -67,11 +68,15 @@ def confirm_registration(ticket: str, app_settings_repository: Annotated[AppSett
     receiver_email = secret_parts[0]
     password = secret_parts[1]
 
-    cached_password = registrarion_cache.get(receiver_email)
+    cached_password = registration_cache.get(receiver_email)
     if cached_password is not None and password == cached_password:
         user_repository = UsersRepository()
         pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
         hashed_password=pwd_context.hash(password)
+
+        existed_user = user_repository.get_by_email(receiver_email)
+        if existed_user is not None:
+            return Response(status_code=HTTPStatus.FORBIDDEN)
 
         user_repository.post(
             UserModel(
@@ -81,4 +86,6 @@ def confirm_registration(ticket: str, app_settings_repository: Annotated[AppSett
             )
         )
 
-    return Response(status_code=200)
+        return Response(status_code=HTTPStatus.OK)
+
+    return Response(status_code=HTTPStatus.BAD_REQUEST)

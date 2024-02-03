@@ -22,7 +22,7 @@ async def get_user_list(
 @router.post("/")
 async def post(
     todo: TodoModel, auth_user: Annotated[UserModel, Depends(verify_access_token)]
-) -> TodoModel:
+    ) -> TodoModel:
     todo_repository = TodosRepository()
     added_todo = todo_repository.post(todo, auth_user)
 
@@ -31,7 +31,7 @@ async def post(
 
 @router.delete("/{todo_id}")
 async def delete(
-    todo_id: int, auth_user: Annotated[UserModel, Depends(verify_access_token)]
+    todo_id: str, auth_user: Annotated[UserModel, Depends(verify_access_token)]
 ):
     todo_repository = TodosRepository()
     deleted_todo = todo_repository.delete(todo_id, auth_user)
