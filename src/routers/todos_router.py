@@ -15,7 +15,8 @@ async def get_user_list(
 ) -> List[TodoModel]:
     todo_repository = TodosRepository()
     todos = todo_repository.get_list(auth_user)
-
+    todos.sort(key=lambda todo: todo.date)
+    
     return todos
 
 
