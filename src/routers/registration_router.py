@@ -1,5 +1,6 @@
 from base64 import b64decode
 from http import HTTPStatus
+import os
 from passlib.context import CryptContext
 from re import fullmatch
 from typing import Annotated
@@ -49,8 +50,9 @@ async def post_registration(
     message["Subject"] = "Registration account in Todo Manager"
     secret = encrypt(f'{receiver_email}->{registration.password}', b64decode(MASTER_KEY))
     registration_cache[receiver_email] = registration.password
+    web_ui_root = 'http://localhost:3000' if os.environ.get("WEB_UI_ROOT") is None else os.environ.get("WEB_UI_ROOT")
 
-    message.attach(MIMEText(f'http://localhost:3000/registration/confirm?ticket={secret}', "plain"))
+    message.attach(MIMEText(f'{web_ui_root}/registration/confirm?ticket={secret}', "plain"))
 
     with smtplib.SMTP(smtp_server, port) as server:
         server.login(login, password)
